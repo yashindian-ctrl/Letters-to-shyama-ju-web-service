@@ -5,6 +5,8 @@ import LetterGallery from './components/LetterGallery';
 import OfferingAnimation from './components/OfferingAnimation';
 import { Letter } from './types/Letter';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 function App() {
   const [letters, setLetters] = useState<Letter[]>([]);
   const [showGallery, setShowGallery] = useState(false);
@@ -12,7 +14,7 @@ function App() {
 
   // Load letters from API on mount
   useEffect(() => {
-    fetch('http://localhost:8000/letters')
+    fetch(`${API_URL}/letters`)
       .then(res => res.json())
       .then(data => setLetters(data))
       .catch(err => console.error("Failed to fetch letters", err));
@@ -20,7 +22,7 @@ function App() {
 
   const handleSubmitLetter = async (content: string) => {
     try {
-      const res = await fetch('http://localhost:8000/letters', {
+      const res = await fetch(`${API_URL}/letters`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content })
@@ -39,7 +41,7 @@ function App() {
     // Mark letter as offered after animation
     setTimeout(async () => {
       try {
-        const res = await fetch(`http://localhost:8000/letters/${letter.id}/offer`, {
+        const res = await fetch(`${API_URL}/letters/${letter.id}/offer`, {
           method: 'PATCH'
         });
         if (res.ok) {
@@ -85,8 +87,8 @@ function App() {
               <button
                 onClick={() => setShowGallery(false)}
                 className={`px-8 py-3 rounded-full transition-all duration-300 font-medium ${!showGallery
-                    ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg transform scale-105'
-                    : 'text-amber-800 hover:text-amber-600 hover:bg-amber-50'
+                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg transform scale-105'
+                  : 'text-amber-800 hover:text-amber-600 hover:bg-amber-50'
                   }`}
               >
                 Write Letter
@@ -94,8 +96,8 @@ function App() {
               <button
                 onClick={() => setShowGallery(true)}
                 className={`px-8 py-3 rounded-full transition-all duration-300 font-medium ${showGallery
-                    ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg transform scale-105'
-                    : 'text-amber-800 hover:text-amber-600 hover:bg-amber-50'
+                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg transform scale-105'
+                  : 'text-amber-800 hover:text-amber-600 hover:bg-amber-50'
                   }`}
               >
                 Read Letters ({letters.length})
