@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: letters-backend
+    env: python
+    root: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port 10000
+    envVars:
+      - key: MONGO_URL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
